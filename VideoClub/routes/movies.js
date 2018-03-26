@@ -1,20 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const moviesController = require('../controllers/moviesController');
 
-router.get('/', (request, response, next) => {
-  response.send("Hola bb, u r in /movies/");
-});
+router.get('/:page?', moviesController.index);
 
-router.post('/', (request, response, next) => {
-  response.send("Estaś en /movies/ -> Post")
-});
+router.post('/', moviesController.create);
 
-router.put('/', (request, response, next) => {
-  response.send("Estaś en /movies/ -> Put")
-});
+router.put('/:id', moviesController.update);
 
-router.delete('/', (request, response, next) => {
-  response.send("Estaś en /movies/ -> Delete")
-});
+router.delete('/:id', moviesController.remove);
 
 module.exports = router;

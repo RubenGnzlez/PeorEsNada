@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('videoclub:server');
 var http = require('http');
+const mongoose = require('mongoose'); //Librería de Mongoose
 
 /**
  * Get port from environment and store in Express.
@@ -20,12 +21,27 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+// Mongoose Connection
+
+// mongodb://<?user>:<?password>@<dominio>:<puerto>/<data_base>
+const uri = 'mongodb://localhost:27017/videoClub';
+mongoose.connect(uri);
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console,
+  'La conexión a mongoDb falló D:'));
+
+db.on('open', ()=>{
+  server.listen(port, ()=>{
+    console.log('La conexión a mongoDb fue exitosa :DD')
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+// server.listen(port); <- Esta linea se mueve dentro del db.on para que se levante el servidor cuando ya se levante la DB
 server.on('error', onError);
 server.on('listening', onListening);
 
